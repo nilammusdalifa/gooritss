@@ -8,32 +8,54 @@ use Ramsey\Uuid\Uuid;
 
 class ComponentMaterialController extends Controller
 {
-    public function get(){
+    public function get()
+    {
         $result = DB::table('components')->get();
 
         return $result;
     }
 
-    public function insert(Request $request) {
-        $componentName = $request->post('componentName');
-        $componentStock = $request->post('componentStock');
-        $cost = $request->post('componentCost');
-        $productionTime = $request->post('productionTime');
+    public function insertComponent(Request $request)
+    {
+        $id = Uuid::uuid4();
+        $componentName = $request->post('name');
+        $componentStock = $request->post('stock');
+        $cost = $request->post('production_cost');
+        $productionTime = $request->post('production_time');
+        $requiredMaterial = $request->post('material');
 
         try {
-            DB::table('components')->insert([
-                'id' => Uuid::uuid4(),
+            $insertData = DB::table('components')->insertGetId([
+                'id' => $id,
                 'name' => $componentName,
                 'stock' => $componentStock,
                 'production_cost' => $cost,
                 'production_time' => $productionTime
             ]);
 
-            return('success');
+            $componentHasMaterials = [];
+
+            for ($i = 0; $i < count($requiredMaterial); $i++) {
+                $x = [
+                    'id' => Uuid::uuid4(),
+                    'component_id' => $id,
+                    'raw_material_id' => $requiredMaterial[$i]['raw_material_id'],
+                    'raw_material_qty' => $requiredMaterial[$i]['raw_material_qty']
+                ];
+
+                array_push($componentHasMaterials, $x);
+            }
+
+            DB::table('components_materials')->insert($componentHasMaterials);
+
+            return ('sukses');
         } catch (\Throwable $th) {
             return $th;
         }
+    }
 
+    public function insertMaterial(Request $request)
+    {
         $materialName = $request->post('materialName');
         $materialStock = $request->post('materialStock');
 
@@ -41,12 +63,22 @@ class ComponentMaterialController extends Controller
             DB::table('raw_materials')->insert([
                 'id' => Uuid::uuid4(),
                 'name' => $materialName,
-                'stock' => $materialStock
+                'stock' => $materialStock,
             ]);
 
-            return('success');
+            return ('success');
         } catch (\Throwable $th) {
             return $th;
+        }
+    }
+
+    public function getMaterial()
+    {
+        try {
+            $material = DB::table('raw_materials')->get();
+            return $material;
+        } catch (\Throwable $th) {
+            throw $th;
         }
     }
 }

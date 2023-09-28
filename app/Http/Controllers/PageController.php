@@ -7,10 +7,10 @@ use Illuminate\Http\Request;
 class PageController extends Controller
 {
     public function componentsAndMaterials() {
-        return view('pages.material');
+        return view('pages.material')->with('materialIsActive', 'active')->with('ppIsActive', '');
     }
 
     public function productionPlanning(){
-        return view('pages.production_planning');
+        return view('pages.production_planning')->with('materialIsActive', '')->with('ppIsActive', 'active');
     }
 }

@@ -1,1 +1,0 @@
-alert('Ini Home Page!')

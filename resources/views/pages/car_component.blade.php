@@ -37,8 +37,8 @@
                                             </select>
                                         </div>
                                         <div class="col">
-                                            <input type="number" minlength="1" class="form-control form-control-sm"
-                                                name="componentQuantity">
+                                            <input type="number" min="1" class="form-control form-control-sm"
+                                                name="componentQuantity" onkeydown="setMinLength(this)">
                                         </div>
                                     </div>
                                 </div>
@@ -126,6 +126,14 @@
                 }
             })
 
+            function setMinLength(el) {
+                if (el.value != "") {
+                    if (parseInt(el.value) < parseInt(el.min)) {
+                        el.value = el.min;
+                    }
+                }
+            }
+
             function generateComponentDropdown(data) {
                 tempData = []
                 for (var i in data) {
@@ -157,24 +165,24 @@
             }
 
             function insertCar(param) {
-                    return new Promise((resolve, reject) => {
-                        $.ajax({
-                            headers: {
-                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                            },
-                            method: 'POST',
-                            url: route('cc-insert-car'),
-                            data: param,
-                            success: function(data) {
-                                alert('Berhasil ditambahkan!')
-                                resolve(data)
-                            },
-                            error: function(e) {
-                                reject(e)
-                            }
-                        })
+                return new Promise((resolve, reject) => {
+                    $.ajax({
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        method: 'POST',
+                        url: route('cc-insert-car'),
+                        data: param,
+                        success: function(data) {
+                            alert('Berhasil ditambahkan!')
+                            resolve(data)
+                        },
+                        error: function(e) {
+                            reject(e)
+                        }
                     })
-                }
+                })
+            }
         </script>
     </x-slot>
 </x-base>

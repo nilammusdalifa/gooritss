@@ -7,7 +7,11 @@
         {{ $ppIsActive }}
     </x-slot>
 
-    <div class="card mt-3">
+    <x-slot name="ccIsActive">
+        {{ $ccIsActive }}
+    </x-slot>
+
+    <div class="card m-5">
         <div class="card-header">
             <div class="card-title">
                 <h3>Car Production Planning and Simulation</h3>
@@ -86,7 +90,7 @@
                 $('#refferenceTable').on('input', '.custom-quantity', function() {
                     let currentRowId = $(this).closest('tr').data('id')
                     let filteredData = allCarComponents.filter((item) => {
-                        if (item.component_id == currentRowId) return item
+                        if (item.id == currentRowId) return item
                     })[0];
 
                     let affectedSimulationRow = $('#simulationTable').find(`tr[data-id="${currentRowId}"]`)
@@ -98,6 +102,7 @@
                         newProductionTime = newQty * allCarComponents[i].production_time
                     }
 
+                    console.log(newQty, newProductionTime, newTotalCost)
                     $(affectedSimulationRow).find('td').eq(2).text(newQty)
                     $(affectedSimulationRow).find('td').eq(4).text(newTotalCost)
                     $(affectedSimulationRow).find('td').eq(5).text(newProductionTime)
@@ -110,14 +115,14 @@
                     try {
                         for (var i in allCarComponents) {
                             let currentStock = allCarComponents[i].stock
-                            let totalStockNeeded = totalCar * allCarComponents[i].quantity
+                            let totalStockNeeded = totalCar * allCarComponents[i].required_qty
                             let statusStock = (currentStock - totalStockNeeded) > 0 ? "Mencukupi" :
                                 currentStock - totalStockNeeded
                             let productionCost = allCarComponents[i].production_cost * totalStockNeeded
                             let productionTime = allCarComponents[i].production_time * totalStockNeeded
 
                             let el = `
-                            <tr data-id="${allCarComponents[i].component_id}">
+                            <tr data-id="${allCarComponents[i].id}">
                                 <td>${parseInt(i)+1}</td>
                                 <td>${allCarComponents[i].name}</td>
                                 <td>${totalStockNeeded}</td>
@@ -184,10 +189,10 @@
                     for (let i = 0; i < allCarComponents.length; i++) {
                         console.log(allCarComponents);
                         let el = `
-                            <tr data-id="${allCarComponents[i].component_id}">
+                            <tr data-id="${allCarComponents[i].id}">
                                 <td>${parseInt(i)+1}</td>
                                 <td>${allCarComponents[i].name}</td>
-                                <td>${allCarComponents[i].quantity}</td>
+                                <td>${allCarComponents[i].required_qty}</td>
                                 <td>${allCarComponents[i].stock}</td>
                                 <td>${allCarComponents[i].production_cost}</td>
                                 <td>${allCarComponents[i].production_time} Hours</td>

@@ -7,6 +7,10 @@
         {{ $ppIsActive }}
     </x-slot>
 
+    <x-slot name="ccIsActive">
+        {{ $ccIsActive }}
+    </x-slot>
+
     <div class="m-5">
         <div class="row">
             <div class="col-6">

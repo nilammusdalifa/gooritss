@@ -16,5 +16,10 @@
                         Production Planning
                     </a>
                 </li>
+                <li>
+                    <a href="/page/car-component" class="nav-link {{ $ccIsActive }} link-body-emphasis">
+                        Car Component
+                    </a>
+                </li>
             </ul>
         </div>

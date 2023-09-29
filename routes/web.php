@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CarComponentController;
 use App\Http\Controllers\ComponentMaterialController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\ProductionPlanController;
@@ -25,6 +26,7 @@ Route::controller(PageController::class)->group(function () {
         Route::prefix('page')->group(function () {
             Route::get('/component-raw-material', 'componentsAndMaterials')->name('component-raw-material');
             Route::get('/production-planning', 'productionPlanning')->name('production-planning');
+            Route::get('/car-component', 'carComponent')->name('car-component');
         });
     });
 });
@@ -43,6 +45,14 @@ Route::controller(ProductionPlanController::class)->group(function () {
     Route::name('pp-')->group(function () {
         Route::prefix('pp')->group(function () {
             Route::get('/get-car-components', 'getCarComponents')->name('get-car-components');
+        });
+    });
+});
+
+Route::controller(CarComponentController::class)->group(function () {
+    Route::name('cc-')->group(function() {
+        Route::prefix('cc')->group(function() {
+            Route::post('/insert-car', 'insertCar')->name('insert-car');
         });
     });
 });

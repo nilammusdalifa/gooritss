@@ -1,179 +1,128 @@
--- MySQL dump 10.13  Distrib 8.0.26, for Win64 (x86_64)
---
--- Host: localhost    Database: gooritss_db
--- ------------------------------------------------------
--- Server version	8.0.26
+/*
+ Navicat Premium Data Transfer
 
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!50503 SET NAMES utf8 */;
-/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
-/*!40103 SET TIME_ZONE='+00:00' */;
-/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
-/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
-/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
-/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+ Source Server         : local db
+ Source Server Type    : MySQL
+ Source Server Version : 80026 (8.0.26)
+ Source Host           : localhost:3306
+ Source Schema         : gooritss
 
---
--- Table structure for table `car`
---
+ Target Server Type    : MySQL
+ Target Server Version : 80026 (8.0.26)
+ File Encoding         : 65001
 
+ Date: 30/09/2023 01:18:34
+*/
+
+SET NAMES utf8mb4;
+SET FOREIGN_KEY_CHECKS = 0;
+
+-- ----------------------------
+-- Table structure for car
+-- ----------------------------
 DROP TABLE IF EXISTS `car`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `car` (
-  `id` varchar(36) NOT NULL,
-  `name` varchar(45) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-/*!40101 SET character_set_client = @saved_cs_client */;
+CREATE TABLE `car`  (
+  `id` varchar(36) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `name` varchar(45) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
---
--- Dumping data for table `car`
---
+-- ----------------------------
+-- Records of car
+-- ----------------------------
 
-LOCK TABLES `car` WRITE;
-/*!40000 ALTER TABLE `car` DISABLE KEYS */;
-/*!40000 ALTER TABLE `car` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `car_components`
---
-
+-- ----------------------------
+-- Table structure for car_components
+-- ----------------------------
 DROP TABLE IF EXISTS `car_components`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `car_components` (
-  `car_id` varchar(36) NOT NULL,
-  `component_id` varchar(36) NOT NULL,
-  PRIMARY KEY (`car_id`,`component_id`),
-  KEY `fk_car_has_components_components1_idx` (`component_id`),
-  KEY `fk_car_has_components_car1_idx` (`car_id`),
-  CONSTRAINT `fk_car_has_components_car1` FOREIGN KEY (`car_id`) REFERENCES `car` (`id`),
-  CONSTRAINT `fk_car_has_components_components1` FOREIGN KEY (`component_id`) REFERENCES `components` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-/*!40101 SET character_set_client = @saved_cs_client */;
+CREATE TABLE `car_components`  (
+  `id` varchar(36) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `car_id` varchar(36) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `component_id` varchar(36) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `component_qty` int NULL DEFAULT NULL,
+  PRIMARY KEY (`id`, `car_id`, `component_id`) USING BTREE,
+  INDEX `fk_car_has_components_components1_idx`(`component_id` ASC) USING BTREE,
+  INDEX `fk_car_has_components_car1_idx`(`car_id` ASC) USING BTREE,
+  CONSTRAINT `fk_car_has_components_car1` FOREIGN KEY (`car_id`) REFERENCES `car` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  CONSTRAINT `fk_car_has_components_components1` FOREIGN KEY (`component_id`) REFERENCES `components` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
---
--- Dumping data for table `car_components`
---
+-- ----------------------------
+-- Records of car_components
+-- ----------------------------
 
-LOCK TABLES `car_components` WRITE;
-/*!40000 ALTER TABLE `car_components` DISABLE KEYS */;
-/*!40000 ALTER TABLE `car_components` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `components`
---
-
+-- ----------------------------
+-- Table structure for components
+-- ----------------------------
 DROP TABLE IF EXISTS `components`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `components` (
-  `id` varchar(36) NOT NULL,
-  `name` varchar(45) NOT NULL,
+CREATE TABLE `components`  (
+  `id` varchar(36) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `name` varchar(45) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `stock` int NOT NULL,
-  `production_cost` decimal(19,2) NOT NULL,
+  `production_cost` decimal(19, 2) NOT NULL,
   `production_time` int NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-/*!40101 SET character_set_client = @saved_cs_client */;
+  `required_qty` int NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
---
--- Dumping data for table `components`
---
+-- ----------------------------
+-- Records of components
+-- ----------------------------
+INSERT INTO `components` VALUES ('69607775-29c2-428c-970f-4b36b674b9da', 'Mesin', 50, 200000.00, 20, 5);
+INSERT INTO `components` VALUES ('7d58d5da-1cda-4c3c-bf21-2e5004160399', 'Baut', 40, 100000.00, 3, 30);
+INSERT INTO `components` VALUES ('b89cedb6-b192-464d-93dc-d7e9c9c72f7a', 'Pintu', 100, 20000.00, 5, 4);
 
-LOCK TABLES `components` WRITE;
-/*!40000 ALTER TABLE `components` DISABLE KEYS */;
-/*!40000 ALTER TABLE `components` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `components_materials`
---
-
+-- ----------------------------
+-- Table structure for components_materials
+-- ----------------------------
 DROP TABLE IF EXISTS `components_materials`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `components_materials` (
-  `id` varchar(36) NOT NULL,
+CREATE TABLE `components_materials`  (
+  `id` varchar(36) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `raw_material_qty` int NOT NULL,
-  `components_id` varchar(36) NOT NULL,
-  `raw_materials_id` varchar(36) NOT NULL,
-  PRIMARY KEY (`id`,`components_id`,`raw_materials_id`),
-  KEY `fk_components_has_raw_materials_raw_materials1_idx` (`raw_materials_id`),
-  KEY `fk_components_has_raw_materials_components_idx` (`components_id`),
-  CONSTRAINT `fk_components_has_raw_materials_components` FOREIGN KEY (`components_id`) REFERENCES `components` (`id`),
-  CONSTRAINT `fk_components_has_raw_materials_raw_materials1` FOREIGN KEY (`raw_materials_id`) REFERENCES `raw_materials` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-/*!40101 SET character_set_client = @saved_cs_client */;
+  `component_id` varchar(36) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `raw_material_id` varchar(36) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  PRIMARY KEY (`id`, `component_id`, `raw_material_id`) USING BTREE,
+  INDEX `fk_components_has_raw_materials_raw_materials1_idx`(`raw_material_id` ASC) USING BTREE,
+  INDEX `fk_components_has_raw_materials_components_idx`(`component_id` ASC) USING BTREE,
+  CONSTRAINT `fk_components_has_raw_materials_components` FOREIGN KEY (`component_id`) REFERENCES `components` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  CONSTRAINT `fk_components_has_raw_materials_raw_materials1` FOREIGN KEY (`raw_material_id`) REFERENCES `raw_materials` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
---
--- Dumping data for table `components_materials`
---
+-- ----------------------------
+-- Records of components_materials
+-- ----------------------------
 
-LOCK TABLES `components_materials` WRITE;
-/*!40000 ALTER TABLE `components_materials` DISABLE KEYS */;
-/*!40000 ALTER TABLE `components_materials` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `production_plans`
---
-
+-- ----------------------------
+-- Table structure for production_plans
+-- ----------------------------
 DROP TABLE IF EXISTS `production_plans`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `production_plans` (
-  `id` varchar(36) NOT NULL,
-  `name` varchar(45) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-/*!40101 SET character_set_client = @saved_cs_client */;
+CREATE TABLE `production_plans`  (
+  `id` varchar(36) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `name` varchar(45) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
---
--- Dumping data for table `production_plans`
---
+-- ----------------------------
+-- Records of production_plans
+-- ----------------------------
 
-LOCK TABLES `production_plans` WRITE;
-/*!40000 ALTER TABLE `production_plans` DISABLE KEYS */;
-/*!40000 ALTER TABLE `production_plans` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `raw_materials`
---
-
+-- ----------------------------
+-- Table structure for raw_materials
+-- ----------------------------
 DROP TABLE IF EXISTS `raw_materials`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `raw_materials` (
-  `id` varchar(36) NOT NULL,
-  `name` varchar(45) NOT NULL,
+CREATE TABLE `raw_materials`  (
+  `id` varchar(36) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `name` varchar(45) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `stock` int NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-/*!40101 SET character_set_client = @saved_cs_client */;
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
---
--- Dumping data for table `raw_materials`
---
+-- ----------------------------
+-- Records of raw_materials
+-- ----------------------------
+INSERT INTO `raw_materials` VALUES ('0699203d-09d7-4517-b641-ee2786a2c16f', 'Plastik', 20);
+INSERT INTO `raw_materials` VALUES ('0a41e1e8-8e46-4f33-83c1-32abccdc098c', 'Baja', 10);
+INSERT INTO `raw_materials` VALUES ('2fb98911-fa2e-4e5c-98ea-8d095e55ae33', 'Besi', 50);
+INSERT INTO `raw_materials` VALUES ('df89a2e4-e543-448b-a644-01b0bdcf2f22', 'Karet', 60);
 
-LOCK TABLES `raw_materials` WRITE;
-/*!40000 ALTER TABLE `raw_materials` DISABLE KEYS */;
-/*!40000 ALTER TABLE `raw_materials` ENABLE KEYS */;
-UNLOCK TABLES;
-/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
-
-/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
-/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
-/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
-
--- Dump completed on 2023-09-29 22:06:29
+SET FOREIGN_KEY_CHECKS = 1;

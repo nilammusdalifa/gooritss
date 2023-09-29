@@ -27,12 +27,12 @@
                                 <input type="text" class="form-control" name="componentName">
                             </div>
                             <div class="mb-3">
-                                <label for="stock" class="form-label">Stock</label>
-                                <input type="number" minlength="1" class="form-control" name="componentStock">
+                                <label for="stock" class="form-label">Current Stock</label>
+                                <input type="number" min="1" class="form-control" name="componentStock" onkeydown="setMinLength(this)">
                             </div>
                             <div class="mb-3">
-                                <label for="cost" class="form-label">Cost</label>
-                                <input type="number" minlength="1" class="form-control" name="componentCost">
+                                <label for="cost" class="form-label">Cost per Component</label>
+                                <input type="number" min="1" class="form-control" name="componentCost" onkeydown="setMinLength(this)">
                             </div>
                             <div class="mb-3">
                                 <label for="cost" class="form-label">Material</label>
@@ -44,16 +44,20 @@
                                             </select>
                                         </div>
                                         <div class="col">
-                                            <input type="number" minlength="1" class="form-control form-control-sm"
-                                                name="materialQuantity">
+                                            <input type="number" min="1" class="form-control form-control-sm"
+                                                name="materialQuantity" onkeydown="setMinLength(this)">
                                         </div>
                                     </div>
                                 </div>
                                 <button id="addMaterial" class="btn btn-icon btn-sm btn-primary">+</button>
                             </div>
                             <div class="mb-3">
-                                <label for="production_time" class="form-label">Production Time</label>
-                                <input type="number" minlength="1" class="form-control" name="productionTime">
+                                <label for="production_time" class="form-label">Production Time in Hours</label>
+                                <input type="number" min="1" class="form-control" name="productionTime" onkeydown="setMinLength(this)">
+                            </div>
+                            <div class="mb-3">
+                                <label for="default_qty" class="form-label">Default Quantity</label>
+                                <input type="number" min="1" class="form-control" name="defaultQty" onkeydown="setMinLength(this)">
                             </div>
                             <div class="d-flex justify-content-end">
                                 <button type="submit" class="btn btn-primary">Submit</button>
@@ -78,7 +82,7 @@
                             </div>
                             <div class="mb-3">
                                 <label for="materialStock" class="form-label">Stock</label>
-                                <input type="number" minlength="1" class="form-control" name="materialStock">
+                                <input type="number" min="1" class="form-control" name="materialStock" onkeydown="setMinLength(this)">
                             </div>
                             <div class="d-flex justify-content-end">
                                 <button type="submit" class="btn btn-primary">Submit</button>
@@ -98,7 +102,7 @@
                 </select>
             </div>
             <div class="col">
-                <input type="number" minlength="1" class="form-control form-control-sm" name="materialQuantity">
+                <input type="number" min="1" class="form-control form-control-sm" name="materialQuantity">
             </div>
         </div>
     </div>
@@ -119,6 +123,14 @@
                         data: allMaterial,
                         width: '100%'
                     })
+                }
+
+                function setMinLength(el) {
+                    if (el.value != "") {
+                        if (parseInt(el.value) < parseInt(el.min)) {
+                            el.value = el.min;
+                        }
+                    }
                 }
 
                 function generateMaterialDropdown(data) {
@@ -155,6 +167,7 @@
                         stock: $('[name="componentStock"]').val(),
                         production_cost: $('[name="componentCost"]').val(),
                         production_time: $('[name="productionTime"]').val(),
+                        default_qty: $('[name="defaultQty"]').val(),
                         material: tempMaterial
                     }
 

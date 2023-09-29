@@ -22,15 +22,17 @@ class ComponentMaterialController extends Controller
         $componentStock = $request->post('stock');
         $cost = $request->post('production_cost');
         $productionTime = $request->post('production_time');
+        $default_qty = $request->post('default_qty');
         $requiredMaterial = $request->post('material');
 
         try {
-            $insertData = DB::table('components')->insertGetId([
+            DB::table('components')->insert([
                 'id' => $id,
                 'name' => $componentName,
                 'stock' => $componentStock,
                 'production_cost' => $cost,
-                'production_time' => $productionTime
+                'production_time' => $productionTime,
+                'required_qty' => $default_qty
             ]);
 
             $componentHasMaterials = [];

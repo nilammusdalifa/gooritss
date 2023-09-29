@@ -105,7 +105,7 @@
 
     <main class="d-flex flex-nowrap bg-white">
         @include('layout.sidebar')
-        <div class="container m-">
+        <div class="container m-2 overflow-auto">
             {{ $slot }}
         </div>
     </main>

@@ -32,7 +32,7 @@
                         <th scope="col">Stock</th>
                         <th scope="col">Price /pcs</th>
                         <th scope="col">Production Time /pcs</th>
-                        <th scope="col">Consist Of</th>
+                        <th scope="col">Other Components</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -77,9 +77,11 @@
         <script>
             document.addEventListener('DOMContentLoaded', function() {
                 let allCarComponents = []
+                let childComponent = []
+
                 $(async function() {
                     allCarComponents = await getCarComponents()
-                    generateRefferenceTable()
+                    await generateRefferenceTable()
                 })
 
                 $('#adjustSimulation').on('click', function() {
@@ -154,7 +156,7 @@
                     let arrStockStatus = []
                     let arrProductionTime = []
                     for (let i = 0; i < tableChild.length; i++) {
-                        if($(tableChild[i]).data('id') != 'rowGrandTotal'){
+                        if ($(tableChild[i]).data('id') != 'rowGrandTotal') {
                             arrPrice.push(parseFloat($(tableChild[i]).find('td').eq(4).text()))
                             arrQuantity.push(parseFloat($(tableChild[i]).find('td').eq(2).text()))
                             arrStockStatus.push($(tableChild[i]).find('td').eq(3).text())
@@ -163,7 +165,7 @@
                     }
 
                     let totalQuantity = arrQuantity.reduce(function(total, num) {
-                       return total + num
+                        return total + num
                     })
                     let totalPrice = arrPrice.reduce(function(total, num) {
                         return total + num
@@ -191,17 +193,21 @@
                     $('#adjustSimulation').removeAttr('hidden')
                 }
 
-                function generateRefferenceTable() {
+                async function generateRefferenceTable() {
                     for (let i = 0; i < allCarComponents.length; i++) {
                         console.log(allCarComponents);
+                        let component = await getChildComponents(allCarComponents[i].id)
+                        let componentName = component.map(component => component.name).join(', ');
+
                         let el = `
                             <tr data-id="${allCarComponents[i].id}">
                                 <td>${parseInt(i)+1}</td>
                                 <td>${allCarComponents[i].name}</td>
                                 <td>${allCarComponents[i].default_qty}</td>
                                 <td>${allCarComponents[i].stock}</td>
-                                <td>${allCarComponents[i].production_cost}</td>
+                                <td>${parseInt(allCarComponents[i].production_cost)}</td>
                                 <td>${allCarComponents[i].production_time} Hours</td>
+                                <td>${componentName}</td>
                                 </tr>
                                 `
                         $('#refferenceTable').find('tbody').append(el)
@@ -218,6 +224,24 @@
                                 resolve(data)
                             },
                             error: function(err) {
+                                reject(err)
+                            }
+                        })
+                    })
+                }
+
+                function getChildComponents(parentId) {
+                    return new Promise((resolve, reject) => {
+                        $.ajax({
+                            url: route('pp-get-child-components', [parentId]),
+                            method: 'GET',
+                            dataType: 'json',
+                            success: function(data) {
+                                console.log(data);
+                                resolve(data)
+                            },
+                            error: function(err) {
+                                console.log(error)
                                 reject(err)
                             }
                         })

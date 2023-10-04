@@ -47,6 +47,7 @@ Route::controller(ProductionPlanController::class)->group(function () {
     Route::name('pp-')->group(function () {
         Route::prefix('pp')->group(function () {
             Route::get('/get-car-components', 'getCarComponents')->name('get-car-components');
+            Route::get('/get-child-components/{parentId}', 'getChildComponents')->name('get-child-components');
         });
     });
 });

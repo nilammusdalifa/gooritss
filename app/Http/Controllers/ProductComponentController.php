@@ -43,7 +43,7 @@ class ProductComponentController extends Controller
                 'production_cost' => array_sum($productionsCost)
             ]);
 
-            return ('Success');
+            return ('Success!');
         } catch (\Throwable $th) {
             return $th;
         }

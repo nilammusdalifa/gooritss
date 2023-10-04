@@ -96,23 +96,18 @@
 
                 $('#refferenceTable').on('input', '.custom-quantity', function() {
                     let currentRowId = $(this).closest('tr').data('id')
-                    let filteredData = allCarComponents.filter((item) => {
-                        if (item.id == currentRowId) return item
-                    })[0];
 
                     let affectedSimulationRow = $('#simulationTable').find(`tr[data-id="${currentRowId}"]`)
-                    let newQty = $(this).val() * $('[name="totalCar"]').val()
-                    let newTotalCost;
-                    let newProductionTime;
-                    for (var i in allCarComponents) {
-                        newTotalCost = newQty * allCarComponents[i].production_cost
-                        newProductionTime = newQty * allCarComponents[i].production_time
-                    }
+                    let refferenceTable = $('#refferenceTable').find(`tr[data-id="${currentRowId}"]`)
 
-                    console.log(newQty, newProductionTime, newTotalCost)
+                    let newQty = $(this).val() * $('[name="totalCar"]').val()
+                    let newTotalCost = newQty * $(refferenceTable).find('td').eq(4).text();
+                    let newProductionTime = newQty * $(refferenceTable).find('td').eq(5).text();
+
                     $(affectedSimulationRow).find('td').eq(2).text(newQty)
                     $(affectedSimulationRow).find('td').eq(4).text(newTotalCost)
                     $(affectedSimulationRow).find('td').eq(5).text(newProductionTime)
+
                     generateGrandTotal()
                 })
 
@@ -135,7 +130,7 @@
                                 <td>${totalStockNeeded}</td>
                                 <td>${statusStock}</td>
                                 <td>${productionCost}</td>
-                                <td>${productionTime} Hours</td>
+                                <td>${productionTime}</td>
                                 </tr>
                                 `
                             $('#simulationTable').find('tbody').append(el)
@@ -148,7 +143,6 @@
 
                 function generateGrandTotal() {
                     let tableChild = $('#simulationTable').find('tbody').children()
-                    // console.log($('#simulationTable').find('tr[data-id="rowGrandTotal"]').html());
                     $('#simulationTable').find('tr[data-id="rowGrandTotal"]').remove()
 
                     let arrQuantity = []
@@ -186,7 +180,6 @@
                                 <td>${(stockIsEnough ? "Mencukupi" : "Tidak Mencukupi")}</td>
                                 <td>${totalPrice}</td>
                                 <td>${totalProductionTime} Hours</td>
-                                <td>${totalProductionTime} Hours</td>
                             </tr>
                         `
                     $('#simulationTable').find('tbody').append(html)
@@ -195,7 +188,6 @@
 
                 async function generateRefferenceTable() {
                     for (let i = 0; i < allCarComponents.length; i++) {
-                        console.log(allCarComponents);
                         let component = await getChildComponents(allCarComponents[i].id)
                         let componentName = component.map(component => component.name).join(', ');
 
@@ -206,7 +198,7 @@
                                 <td>${allCarComponents[i].default_qty}</td>
                                 <td>${allCarComponents[i].stock}</td>
                                 <td>${parseInt(allCarComponents[i].production_cost)}</td>
-                                <td>${allCarComponents[i].production_time} Hours</td>
+                                <td>${allCarComponents[i].production_time}</td>
                                 <td>${componentName}</td>
                                 </tr>
                                 `
@@ -237,11 +229,9 @@
                             method: 'GET',
                             dataType: 'json',
                             success: function(data) {
-                                console.log(data);
                                 resolve(data)
                             },
                             error: function(err) {
-                                console.log(error)
                                 reject(err)
                             }
                         })

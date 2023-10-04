@@ -68,7 +68,7 @@ class ComponentMaterialController extends Controller
                 'stock' => $materialStock,
             ]);
 
-            return ('success');
+            return ('Success!');
         } catch (\Throwable $th) {
             return $th;
         }

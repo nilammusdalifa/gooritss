@@ -26,8 +26,8 @@ class CarComponentController extends Controller
                 $x = [
                     'id' => Uuid::uuid4(),
                     'car_id' => $id,
-                    'component_id' => $components[$i]['component_id'],
-                    'component_qty' => $components[$i]['component_qty']
+                    'raw_components_id' => $components[$i]['component_id'],
+                    'raw_component_qty' => $components[$i]['component_qty']
                 ];
 
                 array_push($carComponents, $x);
@@ -35,6 +35,7 @@ class CarComponentController extends Controller
 
             DB::table('car_components')->insert($carComponents);
 
+            return('Success!');
         } catch (\Throwable $th) {
             return $th;
         }

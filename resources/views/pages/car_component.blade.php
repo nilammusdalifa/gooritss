@@ -11,47 +11,48 @@
         {{ $ccIsActive }}
     </x-slot>
 
-    <div class="m-5 align-items-center">
-        <div class="row">
-            <div class="col-8">
-                <div class="card">
-                    <div class="card-header">
-                        <div class="card-title">
-                            <h3>Insert Car Component</h3>
-                        </div>
-                    </div>
-                    <div class="car-body m-3">
-                        <form id="formInsertCar">
-                            @csrf
-                            <div class="mb-3">
-                                <label for="carName" class="form-label">Car Name</label>
-                                <input type="text" class="form-control" name="carName">
-                            </div>
-                            <div class="mb-3">
-                                <label for="cost" class="form-label">Component</label>
-                                <div id="componentContainer">
-                                    <div class="row component-custom mb-3">
-                                        <div class="col">
-                                            <select class="form-select select2-custom" name="componentDropdown">
-                                                <option></option>
-                                            </select>
-                                        </div>
-                                        <div class="col">
-                                            <input type="number" min="1" class="form-control form-control-sm"
-                                                name="componentQuantity" onkeydown="setMinLength(this)">
-                                        </div>
-                                    </div>
-                                </div>
-                                <button id="addComponent" class="btn btn-icon btn-sm btn-primary">+</button>
-                            </div>
-                            <div class="d-flex justify-content-end">
-                                <button type="submit" class="btn btn-primary">Submit</button>
-                            </div>
-                        </form>
-                    </div>
+    <x-slot name="pcIsActive">
+        {{ $pcIsActive }}
+    </x-slot>
+
+    <div class="m-5">
+        <div class="card w-50 mx-auto">
+            <div class="card-header">
+                <div class="card-title">
+                    <h3>Insert Car Component</h3>
                 </div>
             </div>
+            <div class="car-body m-3">
+                <form id="formInsertCar">
+                    @csrf
+                    <div class="mb-3">
+                        <label for="carName" class="form-label">Car Name</label>
+                        <input type="text" class="form-control" name="carName">
+                    </div>
+                    <div class="mb-3">
+                        <label for="component" class="form-label">Component</label>
+                        <div id="componentContainer">
+                            <div class="row component-custom mb-3">
+                                <div class="col">
+                                    <select class="form-select select2-custom" name="componentDropdown">
+                                        <option></option>
+                                    </select>
+                                </div>
+                                <div class="col">
+                                    <input type="number" min="1" class="form-control form-control-sm"
+                                        name="componentQuantity" onkeydown="setMinLength(this)">
+                                </div>
+                            </div>
+                        </div>
+                        <button id="addComponent" class="btn btn-icon btn-sm btn-primary">+</button>
+                    </div>
+                    <div class="d-flex justify-content-end">
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+                </form>
+            </div>
         </div>
+
     </div>
 
     <div id="template" hidden>

@@ -9,7 +9,7 @@ class ProductionPlanController extends Controller
 {
     public function getCarComponents()
     {
-        $res = DB::table('components')
+        $res = DB::table('raw_components')
             ->select('*')->get();
 
         return $res;

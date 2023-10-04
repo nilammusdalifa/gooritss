@@ -4,6 +4,7 @@ use App\Http\Controllers\CarComponentController;
 use App\Http\Controllers\ComponentMaterialController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\ProductionPlanController;
+use App\Http\Controllers\ProductComponentController;
 use Illuminate\Support\Facades\Route;
 
 use function Termwind\render;
@@ -27,6 +28,7 @@ Route::controller(PageController::class)->group(function () {
             Route::get('/component-raw-material', 'componentsAndMaterials')->name('component-raw-material');
             Route::get('/production-planning', 'productionPlanning')->name('production-planning');
             Route::get('/car-component', 'carComponent')->name('car-component');
+            Route::get('/product-component', 'productComponent')->name('product-component');
         });
     });
 });
@@ -53,6 +55,18 @@ Route::controller(CarComponentController::class)->group(function () {
     Route::name('cc-')->group(function() {
         Route::prefix('cc')->group(function() {
             Route::post('/insert-car', 'insertCar')->name('insert-car');
+            Route::get('/get-parent-component', 'getParentComponent')->name('get-parent-component');
+        });
+    });
+});
+
+
+Route::controller(ProductComponentController::class)->group(function () {
+    Route::name('rc-')->group(function(){
+        Route::prefix('rc')->group(function(){
+            Route::post('/insert-raw-component', 'insertRawComponents')->name('insert-raw-component');
+            Route::get('/get-parent-component', 'getParentComponent')->name('get-parent-component');
+            Route::get('/get-child-component', 'getChildComponent')->name('get-child-component');
         });
     });
 });

@@ -26,13 +26,13 @@ class ComponentMaterialController extends Controller
         $requiredMaterial = $request->post('material');
 
         try {
-            DB::table('components')->insert([
+            DB::table('raw_components')->insert([
                 'id' => $id,
                 'name' => $componentName,
                 'stock' => $componentStock,
                 'production_cost' => $cost,
                 'production_time' => $productionTime,
-                'required_qty' => $default_qty
+                'default_qty' => $default_qty
             ]);
 
             $componentHasMaterials = [];
@@ -40,15 +40,15 @@ class ComponentMaterialController extends Controller
             for ($i = 0; $i < count($requiredMaterial); $i++) {
                 $x = [
                     'id' => Uuid::uuid4(),
-                    'component_id' => $id,
-                    'raw_material_id' => $requiredMaterial[$i]['raw_material_id'],
-                    'raw_material_qty' => $requiredMaterial[$i]['raw_material_qty']
+                    'raw_material_qty' => $requiredMaterial[$i]['raw_material_qty'],
+                    'raw_component_id' => $id,
+                    'raw_material_id' => $requiredMaterial[$i]['raw_material_id']
                 ];
 
                 array_push($componentHasMaterials, $x);
             }
 
-            DB::table('components_materials')->insert($componentHasMaterials);
+            DB::table('raw_components_materials')->insert($componentHasMaterials);
 
             return ('sukses');
         } catch (\Throwable $th) {
@@ -62,7 +62,7 @@ class ComponentMaterialController extends Controller
         $materialStock = $request->post('materialStock');
 
         try {
-            DB::table('raw_materials')->insert([
+            DB::table('raw_materials')->updateOrInsert([
                 'id' => Uuid::uuid4(),
                 'name' => $materialName,
                 'stock' => $materialStock,

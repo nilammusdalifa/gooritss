@@ -11,13 +11,17 @@
         {{ $ccIsActive }}
     </x-slot>
 
+    <x-slot name="pcIsActive">
+        {{ $pcIsActive }}
+    </x-slot>
+
     <div class="m-5">
         <div class="row">
             <div class="col-6">
                 <div class="card">
                     <div class="card-header">
                         <div class="card-title">
-                            Form Components
+                            <h3>Insert Components</h3>
                         </div>
                     </div>
                     <div class="card-body">
@@ -35,7 +39,7 @@
                                 <input type="number" min="1" class="form-control" name="componentCost" onkeydown="setMinLength(this)">
                             </div>
                             <div class="mb-3">
-                                <label for="cost" class="form-label">Material</label>
+                                <label for="cost" class="form-label">Required Material</label>
                                 <div id="materialContainer">
                                     <div class="row material-custom mb-3">
                                         <div class="col">
@@ -70,7 +74,7 @@
                 <div class="card">
                     <div class="card-header">
                         <div class="card-title">
-                            Form Materials
+                            <h3>Insert Raw Materials</h3>
                         </div>
                     </div>
                     <div class="card-body">
@@ -156,6 +160,7 @@
                         let rowEl = $('#materialContainer > .row').eq(i)
                         let materialId = rowEl.find('select').val()
                         let materialQty = rowEl.find('input').val()
+                        console.log(materialQty)
                         tempMaterial.push({
                             raw_material_id: materialId,
                             raw_material_qty: materialQty

@@ -11,6 +11,10 @@
         {{ $ccIsActive }}
     </x-slot>
 
+    <x-slot name="pcIsActive">
+        {{ $pcIsActive }}
+    </x-slot>
+
     <div class="card m-5">
         <div class="card-header">
             <div class="card-title">
@@ -115,7 +119,7 @@
                     try {
                         for (var i in allCarComponents) {
                             let currentStock = allCarComponents[i].stock
-                            let totalStockNeeded = totalCar * allCarComponents[i].required_qty
+                            let totalStockNeeded = totalCar * allCarComponents[i].default_qty
                             let statusStock = (currentStock - totalStockNeeded) > 0 ? "Mencukupi" :
                                 currentStock - totalStockNeeded
                             let productionCost = allCarComponents[i].production_cost * totalStockNeeded
@@ -192,7 +196,7 @@
                             <tr data-id="${allCarComponents[i].id}">
                                 <td>${parseInt(i)+1}</td>
                                 <td>${allCarComponents[i].name}</td>
-                                <td>${allCarComponents[i].required_qty}</td>
+                                <td>${allCarComponents[i].default_qty}</td>
                                 <td>${allCarComponents[i].stock}</td>
                                 <td>${allCarComponents[i].production_cost}</td>
                                 <td>${allCarComponents[i].production_time} Hours</td>

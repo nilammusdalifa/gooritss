@@ -29,7 +29,7 @@
                         <label for="componentName" class="form-label">Component Name</label>
                         <div class="row mb-3">
                             <div class="col" id="parentComponent">
-                                <select class="form-select select2-custom" name="parentComponentName">
+                                <select class="form-select select2-custom-parent" name="parentComponentName">
                                     <option></option>
                                 </select>
                             </div>
@@ -40,13 +40,13 @@
                         <div id="componentContainer">
                             <div class="row component-custom mb-3">
                                 <div class="col">
-                                    <select class="form-select select2-custom" name="rawComponentName">
+                                    <select class="form-select select2-custom-child" name="rawComponentName">
                                         <option></option>
                                     </select>
                                 </div>
                                 <div class="col">
                                     <input type="number" min="1" class="form-control form-control-sm"
-                                        name="componentQuantity" onkeydown="setMinLength(this)">
+                                        name="componentQuantity" onkeyup="setMinLength(this)">
                                 </div>
                             </div>
                         </div>
@@ -77,10 +77,10 @@
         <script>
             document.addEventListener('DOMContentLoaded', function() {
 
-                let allComponent = []
+                let childComponent = []
                 $(async function() {
-                    allComponent = await getComponents()
-                    initSelect2()
+                    initSelect2Parent()
+                    initSelect2Child()
                 })
 
                 $('#insertRawComponent').on('submit', async (e) => {
@@ -106,29 +106,40 @@
                     try {
                         let result = await insertRawComponent(data)
                         $('#insertRawComponent').trigger('reset')
-                        console.log(result);
+                        alert(result);
                     } catch (error) {
-                        console.log(error);
+                        alert(error);
                     }
                 })
 
                 $('#addRawComponent').on('click', (e) => {
                     e.preventDefault()
                     let clonedEl = $('#template').find('.component-custom').clone()
-                    $(clonedEl).find('select').addClass('select2-custom')
-                    $(clonedEl).find('.select2-custom').empty()
-                    $(clonedEl).find('.select2-custom').select2({
+                    $(clonedEl).find('select').addClass('select2-custom-child')
+                    $(clonedEl).find('.select2-custom-child').empty()
+                    $(clonedEl).find('.select2-custom-child').select2({
                         data: allComponent,
                         width: '100%'
                     })
                     $('#componentContainer').append(clonedEl)
                 })
 
-                async function initSelect2() {
-                    allComponent = generateComponentDropdown(allComponent)
-                    $('.select2-custom').empty()
-                    $('.select2-custom').select2({
-                        data: allComponent,
+                async function initSelect2Parent() {
+                    parentComponent = await getParentComponents()
+                    component = generateComponentDropdown(parentComponent)
+                    $('.select2-custom-parent').empty()
+                    $('.select2-custom-parent').select2({
+                        data: component,
+                        width: '100%'
+                    })
+                }
+
+                async function initSelect2Child() {
+                    childComponent = await getChildComponents()
+                    component = generateComponentDropdown(childComponent)
+                    $('.select2-custom-child').empty()
+                    $('.select2-custom-child').select2({
+                        data: component,
                         width: '100%'
                     })
                 }
@@ -150,6 +161,44 @@
                                 reject(e)
                             }
                         })
+                    })
+                }
+
+                function getParentComponents() {
+                    return new Promise((resolve, reject) => {
+                        $.ajax({
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            },
+                            method: 'GET',
+                            url: route('rc-get-parent-component'),
+                            success: function(data) {
+                                console.log(data)
+                                resolve(data)
+                            },
+                            error: function(e) {
+                                reject(e)
+                            }
+                        });
+                    })
+                }
+
+                function getChildComponents() {
+                    return new Promise((resolve, reject) => {
+                        $.ajax({
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            },
+                            method: 'GET',
+                            url: route('rc-get-child-component'),
+                            success: function(data) {
+                                console.log(data)
+                                resolve(data)
+                            },
+                            error: function(e) {
+                                reject(e)
+                            }
+                        });
                     })
                 }
 

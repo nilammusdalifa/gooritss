@@ -48,4 +48,30 @@ class ProductComponentController extends Controller
             return $th;
         }
     }
+
+    public function getParentComponent()
+    {
+        $parentComponent = DB::table('raw_components')
+            ->select('raw_components.id', 'raw_components.name')
+            ->whereNotIn('raw_components.id', function ($query) {
+                $query->select(DB::raw('DISTINCT child_component_id'))
+                    ->from('component_has_other_component');
+            })
+            ->get();
+
+        return $parentComponent;
+    }
+
+    public function getChildComponent()
+    {
+        $parentComponent = DB::table('raw_components')
+            ->select('raw_components.id', 'raw_components.name')
+            ->whereNotIn('raw_components.id', function ($query) {
+                $query->select(DB::raw('DISTINCT parent_component_id'))
+                    ->from('component_has_other_component');
+            })
+            ->get();
+
+        return $parentComponent;
+    }
 }

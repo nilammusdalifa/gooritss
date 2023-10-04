@@ -154,7 +154,7 @@
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         },
                         method: 'GET',
-                        url: route('pp-get-car-components'),
+                        url: route('rc-get-parent-component'),
                         success: function(data) {
                             resolve(data)
                         },

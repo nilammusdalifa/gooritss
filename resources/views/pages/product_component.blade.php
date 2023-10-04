@@ -106,9 +106,9 @@
                     try {
                         let result = await insertRawComponent(data)
                         $('#insertRawComponent').trigger('reset')
-                        alert(result)
+                        console.log(result);
                     } catch (error) {
-                        alert(error)
+                        console.log(error);
                     }
                 })
 
@@ -146,6 +146,7 @@
                                 resolve(data)
                             },
                             error: function(e) {
+                                console.log(e)
                                 reject(e)
                             }
                         })

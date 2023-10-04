@@ -8,7 +8,8 @@ use Ramsey\Uuid\Uuid;
 
 class ProductComponentController extends Controller
 {
-    public function insertRawComponents(Request $request) {
+    public function insertRawComponents(Request $request)
+    {
         try {
             $parentComponentId = $request->post('parentComponentId');
             $componentData = $request->post('rawComponent');
@@ -27,7 +28,22 @@ class ProductComponentController extends Controller
 
             DB::table('component_has_other_component')->insert($rawComponentsHasComponent);
 
-            return('Success');
+            $childComponentIds = DB::table('component_has_other_component')->where('parent_component_id', $parentComponentId)->pluck('child_component_id');
+            $productionsTime = [];
+            $productionsCost = [];
+
+            for ($i = 0; $i < count($childComponentIds); $i++) {
+                $prodTime = DB::table('raw_components')->where('id', $childComponentIds[$i])->value('production_time');
+                $prodCost = DB::table('raw_components')->where('id', $childComponentIds[$i])->value('production_cost');
+                array_push($productionsTime, $prodTime);
+                array_push($productionsCost, $prodCost);
+            }
+            DB::table('raw_components')->where('id', $parentComponentId)->update([
+                'production_time' => array_sum($productionsTime),
+                'production_cost' => array_sum($productionsCost)
+            ]);
+
+            return ('Success');
         } catch (\Throwable $th) {
             return $th;
         }

@@ -31,7 +31,8 @@
                         <th scope="col" style="width: 100px;">Required Quantity</th>
                         <th scope="col">Stock</th>
                         <th scope="col">Price /pcs</th>
-                        <th scope="col">Production Time (for all quantity)</th>
+                        <th scope="col">Production Time /pcs</th>
+                        <th scope="col">Consist Of</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -182,6 +183,7 @@
                                 <td>${totalQuantity}</td>
                                 <td>${(stockIsEnough ? "Mencukupi" : "Tidak Mencukupi")}</td>
                                 <td>${totalPrice}</td>
+                                <td>${totalProductionTime} Hours</td>
                                 <td>${totalProductionTime} Hours</td>
                             </tr>
                         `
